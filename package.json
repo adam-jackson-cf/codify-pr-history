@@ -1,0 +1,16 @@
+{
+  "name": "code-review-research",
+  "version": "1.0.0",
+  "description": "Code review research and tools for GitHub Copilot",
+  "private": true,
+  "scripts": {
+    "lint:md": "markdownlint 'codify-pr-history/**/*.md' --config .markdownlint.json",
+    "lint:md:fix": "markdownlint 'codify-pr-history/**/*.md' --config .markdownlint.json --fix"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.39.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

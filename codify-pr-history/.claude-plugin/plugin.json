@@ -1,0 +1,27 @@
+{
+  "name": "codify-pr-reviews",
+  "description": "Analyze GitHub PR review history to identify patterns and generate GitHub Copilot instruction rules that automate recurring review feedback",
+  "version": "1.0.0",
+  "author": {
+    "name": "Adam Jackson"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/codify-pr-reviews"
+  },
+  "keywords": [
+    "github",
+    "code-review",
+    "copilot",
+    "automation",
+    "patterns",
+    "pull-requests",
+    "code-quality",
+    "llm",
+    "analysis"
+  ],
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=1.0.0"
+  }
+}

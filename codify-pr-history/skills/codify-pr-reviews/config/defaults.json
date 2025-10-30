@@ -1,0 +1,34 @@
+{
+  "defaultDaysBack": 90,
+  "defaultExcludeAuthors": [
+    "dependabot",
+    "dependabot[bot]",
+    "github-actions",
+    "github-actions[bot]",
+    "renovate",
+    "renovate[bot]"
+  ],
+  "defaultMinOccurrences": 3,
+  "defaultSemanticThreshold": 0.85,
+  "defaultMinCommentLength": 20,
+  "categories": [
+    "security",
+    "error-handling",
+    "type-safety",
+    "performance",
+    "accessibility",
+    "react-patterns",
+    "api-design",
+    "database",
+    "testing",
+    "code-style"
+  ],
+  "instructionFiles": {
+    "repository": "../copilot-review-demo/.github/copilot-instructions.md",
+    "backend": "../copilot-review-demo/backend/backend.instructions.md",
+    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md",
+    "vsCodeSecurity": "../copilot-review-demo/.vscode/rules/security-patterns.md",
+    "vsCodeGeneral": "../copilot-review-demo/.vscode/rules/general-guidelines.md",
+    "vsCodeTesting": "../copilot-review-demo/.vscode/rules/testing-standards.md"
+  }
+}
