@@ -385,6 +385,8 @@ The plugin uses **5 specialized subagents** that run in isolated contexts:
 
 **Why subagents?** Processing 450+ PR comments would overflow the main context (~200k tokens). Subagents handle raw data in isolation and return only summaries (~2k tokens) to the main conversation.
 
+**Token Efficiency**: 50k → 2k tokens in main conversation (96% reduction through subagent isolation)
+
 ### Data Organization
 
 All plugin data stored in `.workspace/codify-pr-history/`:
@@ -431,7 +433,7 @@ All plugin data stored in `.workspace/codify-pr-history/`:
   - 1 skill (orchestrator)
   - 5 subagents (isolated processors)
   - 1 slash command
-  - 8 resource guides
+  - 7 resource guides
   - 4 LLM prompts
 - **copilot-review-demo/** - Full-stack demo application
   - Backend: Express + TypeScript + SQLite

@@ -40,6 +40,92 @@ Pattern analysis transforms grouped comments into structured patterns and determ
 
 ---
 
+## Configuration
+
+### Default Settings
+
+The pattern analysis stage uses these default settings from `config/defaults.json`:
+
+```json
+{
+  "categories": [
+    "security",
+    "error-handling",
+    "type-safety",
+    "performance",
+    "accessibility",
+    "react-patterns",
+    "api-design",
+    "database",
+    "testing",
+    "code-style"
+  ],
+  "instructionFiles": {
+    "repository": "../copilot-review-demo/.github/copilot-instructions.md",
+    "backend": "../copilot-review-demo/backend/backend.instructions.md",
+    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md",
+    "vsCodeSecurity": "../copilot-review-demo/.vscode/rules/security-patterns.md"
+  }
+}
+```
+
+### Run-Specific Configuration
+
+Each run receives these parameters at invocation:
+
+```json
+{
+  "preprocessedCommentsPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/02-preprocess/preprocessed-comments.json",
+  "existingInstructionFiles": {
+    "repository": "../copilot-review-demo/.github/copilot-instructions.md",
+    "backend": "../copilot-review-demo/backend/backend.instructions.md",
+    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md"
+  },
+  "categories": ["security", "error-handling", "type-safety", ...],
+  "promptPath": "prompts/pattern-analysis.md",
+  "outputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/03-analyze/patterns.json"
+}
+```
+
+### Output File Structure
+
+Results are saved to `03-analyze/patterns.json` with this structure:
+
+```json
+{
+  "metadata": {
+    "runId": "2025-10-30_143022",
+    "inputGroups": 20,
+    "totalPatterns": 12,
+    "triageSummary": {
+      "alreadyCovered": 4,
+      "needsStrengthening": 3,
+      "newRuleNeeded": 5
+    }
+  },
+  "patterns": [
+    {
+      "id": "sql-injection-pattern",
+      "title": "SQL Injection via String Concatenation",
+      "description": "User input concatenated directly into SQL queries",
+      "frequency": 8,
+      "severity": "critical",
+      "category": "security",
+      "isRedFlag": true,
+      "triage": {
+        "decision": "new-rule-needed",
+        "rationale": "No existing rule covers SQL injection patterns",
+        "matchedRule": null,
+        "confidence": 0.95
+      },
+      "examples": [...]
+    }
+  ]
+}
+```
+
+---
+
 ## Process
 
 ### Step 1: Identify Pattern

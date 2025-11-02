@@ -383,6 +383,44 @@ git config user.email "your@email.com"
 - Skill very slow
 - Taking 10+ minutes for 90 days
 
+**Expected Performance Timing**:
+
+### First Run (90 days):
+- Stack analysis: 30 seconds
+- Fetch: 2 minutes (45 PRs)
+- Preprocess: 1 minute
+- Analyze: 1 minute
+- Total: ~5-10 minutes (+ user interaction time)
+
+### Later Runs (30 days) with Cache:
+- Stack analysis: SKIPPED (cached)
+- Fetch: 30 seconds (15 PRs)
+- Preprocess: 20 seconds
+- Analyze: 30 seconds
+- Total: ~2-3 minutes (+ user interaction time)
+
+**Pattern Evolution Tracking**:
+
+The system tracks how patterns improve over time:
+
+```json
+{
+  "patterns": {
+    "sql-injection": {
+      "firstSeen": "2025-09-30",
+      "occurrences": [
+        {"date": "2025-09-30", "count": 12, "action": "none"},
+        {"date": "2025-10-15", "count": 8, "action": "strengthened"},
+        {"date": "2025-10-30", "count": 2, "action": "none"}
+      ],
+      "trend": "improving"
+    }
+  }
+}
+```
+
+This shows that strengthening the SQL injection rule reduced occurrences from 12 → 8 → 2 over time, demonstrating the effectiveness of codified rules.
+
 **Solutions**:
 
 ### 1. Reduce Scope

@@ -11,6 +11,89 @@ Transform approved patterns into:
 
 Both include good/bad code examples in proper markdown format.
 
+---
+
+## Configuration
+
+### Run-Specific Configuration
+
+Each run receives these parameters at invocation:
+
+```json
+{
+  "patternsPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/04-approve/patterns-approved.json",
+  "instructionFiles": {
+    "repository": "../copilot-review-demo/.github/copilot-instructions.md",
+    "backend": "../copilot-review-demo/backend/backend.instructions.md",
+    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md"
+  },
+  "promptPath": "prompts/rule-generation.md",
+  "outputDir": ".workspace/codify-pr-history/runs/2025-10-30_143022/05-generate/drafts/"
+}
+```
+
+### Output File Structure
+
+Draft rules are saved to `05-generate/drafts/` with this naming pattern:
+
+```text
+draft-{target}-{action}-{pattern-id}.md
+
+Examples:
+- draft-backend-NEW-rate-limiting.md
+- draft-backend-STRENGTHEN-sql-injection.md
+- draft-frontend-NEW-react-keys.md
+- draft-repository-NEW-error-handling.md
+```
+
+Each draft file contains:
+
+```markdown
+# Rule: {title}
+
+Generated from pattern: {pattern-id}
+Action: {create|strengthen}
+Target file: {path}
+Target section: {section}
+
+## Generated Rule
+
+{markdown content with examples}
+
+## Pattern Context
+
+Frequency: {number}
+Severity: {critical|high|medium|low}
+Category: {category}
+Examples from PRs: {count}
+```
+
+### Rule Formatting Standards
+
+All generated rules follow this structure:
+
+```markdown
+## {Descriptive Title}
+
+{Brief description of the issue and why it matters}
+
+- ALWAYS {positive directive}
+- NEVER {negative directive}
+- CONSIDER {optional best practice}
+
+❌ BAD:
+```{language}
+{problematic code}
+```
+
+✅ GOOD:
+```{language}
+{corrected code}
+```
+
+{Additional context or edge cases if needed}
+```
+
 ## Two Generation Modes
 
 ### Mode 1: Create New Rule

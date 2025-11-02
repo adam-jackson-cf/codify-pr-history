@@ -198,6 +198,71 @@ gh api repos/myorg/myrepo/issues/123/comments \
 }
 ```
 
+---
+
+## Configuration
+
+### Default Settings
+
+The fetching stage uses these default settings from `config/defaults.json`:
+
+```json
+{
+  "defaultDaysBack": 90,
+  "defaultExcludeAuthors": [
+    "dependabot",
+    "github-actions",
+    "renovate"
+  ],
+  "defaultMinCommentLength": 20
+}
+```
+
+### Run-Specific Configuration
+
+Each run receives these parameters at invocation:
+
+```json
+{
+  "repo": "auto-detected from git remote",
+  "daysBack": 90,
+  "excludeAuthors": ["dependabot", "github-actions", "renovate"],
+  "minCommentLength": 20,
+  "outputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/01-fetch/pr-comments.json",
+  "runId": "2025-10-30_143022"
+}
+```
+
+### Output File Structure
+
+Results are saved to `01-fetch/pr-comments.json` with this structure:
+
+```json
+{
+  "metadata": {
+    "runId": "2025-10-30_143022",
+    "repo": "myorg/myrepo",
+    "dateRange": {
+      "start": "2025-08-01",
+      "end": "2025-10-30"
+    },
+    "totalPRs": 45,
+    "totalComments": 450
+  },
+  "comments": [
+    {
+      "id": 123456,
+      "prNumber": 123,
+      "body": "Consider adding input validation here",
+      "path": "src/auth/login.ts",
+      "line": 42,
+      "author": "reviewer1",
+      "createdAt": "2025-08-15T10:30:00Z"
+    }
+  ]
+}
+```
+
 ### 3. Date Range
 
 Only PRs **created** within the date range are included.

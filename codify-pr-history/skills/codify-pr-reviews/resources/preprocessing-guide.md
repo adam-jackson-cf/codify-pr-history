@@ -61,6 +61,86 @@ Comments matching red flags ALWAYS kept regardless of frequency:
 
 - Result: +5 red flag groups
 
+---
+
+## Configuration
+
+### Default Settings
+
+The preprocessing stage uses these default settings from `config/defaults.json`:
+
+```json
+{
+  "defaultMinOccurrences": 3,
+  "defaultSemanticThreshold": 0.85
+}
+```
+
+### Run-Specific Configuration
+
+Each run receives these parameters at invocation:
+
+```json
+{
+  "inputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/01-fetch/pr-comments.json",
+  "redFlagsPath": ".workspace/codify-pr-history/config/red-flags.json",
+  "minOccurrences": 3,
+  "semanticThreshold": 0.85,
+  "outputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/02-preprocess/preprocessed-comments.json"
+}
+```
+
+### Configuration Parameters
+
+- **`minOccurrences`**: Minimum times a pattern must appear (default: 3)
+  - Lower values = more patterns, but potentially less meaningful
+  - Higher values = fewer patterns, but higher confidence
+
+- **`semanticThreshold`**: Similarity threshold for semantic grouping (default: 0.85)
+  - 0.8 = more aggressive grouping (fewer groups)
+  - 0.9 = more conservative grouping (more groups)
+
+### Output File Structure
+
+Results are saved to `02-preprocess/preprocessed-comments.json` with this structure:
+
+```json
+{
+  "metadata": {
+    "runId": "2025-10-30_143022",
+    "inputComments": 450,
+    "outputGroups": 20,
+    "filteringStats": {
+      "exactDuplicates": 40,
+      "fuzzyDuplicates": 60,
+      "semanticGroups": 10,
+      "frequencyFiltered": 325,
+      "redFlagsKept": 5
+    }
+  },
+  "commentGroups": [
+    {
+      "id": "sql-injection",
+      "title": "SQL Injection Vulnerability",
+      "pattern": "SQL injection via string concatenation",
+      "frequency": 8,
+      "examples": [
+        {
+          "comment": "SQL injection vulnerability - use parameterized queries",
+          "prNumber": 123,
+          "path": "src/users.ts",
+          "line": 45,
+          "author": "reviewer1"
+        }
+      ],
+      "isRedFlag": true
+    }
+  ]
+}
+```
+
+---
+
 ## Final Output
 
 **20 groups** representing 120 comments (330 filtered out = 73% reduction)

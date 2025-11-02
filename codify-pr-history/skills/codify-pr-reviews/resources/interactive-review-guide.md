@@ -11,11 +11,186 @@ The skill has TWO interactive review stages:
 1. **Stage 5: Pattern Review** - Approve which patterns should become rules
 2. **Stage 7: Wording Review** - Approve the actual rule content
 
+## Decision Points Framework
+
+Throughout the workflow, you make decisions at two key stages:
+
+### Stage 5: Pattern-Level Decisions (Strategic)
+
+**What you decide**: Which patterns should become rules?
+
+**Key questions**:
+- Which patterns should become rules?
+- Should existing rules be strengthened or left alone?
+- Are triage decisions correct?
+- Is the frequency high enough to warrant action?
+
+**Focus**: High-level strategy (what to fix)
+
+### Stage 7: Rule-Level Decisions (Tactical)
+
+**What you decide**: How should the rules be written?
+
+**Key questions**:
+- Is the rule wording clear and actionable?
+- Are the examples appropriate for the codebase?
+- Is the target file correct?
+- Do the directives make sense for your team?
+
+**Focus**: Tactical execution (how to fix)
+
 **Why two stages?**
 
 - Stage 5: Strategic decisions (what to fix)
 - Stage 7: Tactical execution (how to fix)
-- Allows refinement without re-analyzing
+- Allows refinement without re-analyzing patterns
+- Separation of concerns enables better decision quality
+
+---
+
+## Configuration
+
+### Stage 5: Pattern Review Configuration
+
+**Input**: `03-analyze/patterns.json` (from pattern analysis stage)
+
+**Output**: `04-approve/patterns-approved.json` with user decisions
+
+**Configuration**:
+```json
+{
+  "patternsPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/03-analyze/patterns.json",
+  "outputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/04-approve/patterns-approved.json"
+}
+```
+
+### Stage 7: Rule Wording Review Configuration
+
+**Input**: `05-generate/drafts/*.md` (from rule generation stage)
+
+**Output**: `06-apply/approved-rules.json` with final decisions
+
+**Configuration**:
+```json
+{
+  "draftsDir": ".workspace/codify-pr-history/runs/2025-10-30_143022/05-generate/drafts/",
+  "outputPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/06-apply/approved-rules.json"
+}
+```
+
+### Stage 8: Rule Application Configuration
+
+**Input**: `06-apply/approved-rules.json`
+
+**Output**: Updated instruction files + git commit
+
+**Configuration**:
+```json
+{
+  "approvedRulesPath": ".workspace/codify-pr-history/runs/2025-10-30_143022/06-apply/approved-rules.json",
+  "instructionFiles": {
+    "repository": "../copilot-review-demo/.github/copilot-instructions.md",
+    "backend": "../copilot-review-demo/backend/backend.instructions.md",
+    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md"
+  }
+}
+```
+
+---
+
+## Data Organization
+
+### Stage 5 Output: Approved Patterns
+
+Saved to `04-approve/patterns-approved.json`:
+
+```json
+{
+  "metadata": {
+    "runId": "2025-10-30_143022",
+    "totalPatterns": 12,
+    "approvedPatterns": 8,
+    "decisions": {
+      "create": 5,
+      "strengthen": 3,
+      "skip": 4
+    }
+  },
+  "approvedPatterns": [
+    {
+      "patternId": "sql-injection-pattern",
+      "action": "create",
+      "targetFile": "backend/backend.instructions.md",
+      "targetSection": "Database Operations",
+      "userFeedback": "Focus on LIKE queries and IN clauses",
+      "approvedAt": "2025-10-30T15:45:00Z"
+    }
+  ]
+}
+```
+
+### Stage 7 Output: Approved Rules
+
+Saved to `06-apply/approved-rules.json`:
+
+```json
+{
+  "metadata": {
+    "runId": "2025-10-30_143022",
+    "totalRules": 8,
+    "approvedRules": 6,
+    "rejectedRules": 2
+  },
+  "approvedRules": [
+    {
+      "ruleId": "sql-injection-rule",
+      "sourcePattern": "sql-injection-pattern",
+      "action": "create",
+      "targetFile": "backend/backend.instructions.md",
+      "targetSection": "Database Operations",
+      "finalWording": "approved markdown content",
+      "userEdits": "Added examples for LIKE queries",
+      "approvedAt": "2025-10-30T16:20:00Z"
+    }
+  ]
+}
+```
+
+### Stage 8 Output: Applied Summary
+
+Saved to `06-apply/applied-summary.md`:
+
+```markdown
+# Rules Applied Successfully
+
+## Files Modified (3)
+- backend/backend.instructions.md (2 rules: 1 strengthened, 1 new)
+- repository/.github/copilot-instructions.md (1 new rule)
+- frontend/frontend.instructions.md (3 new rules)
+
+## Summary
+- Rules approved: 6
+- Rules applied: 6
+- Git commit: abc123def
+
+## Changes by Category
+- Security: 3 rules (2 new, 1 strengthened)
+- Error Handling: 2 rules (1 new, 1 strengthened)
+- React Patterns: 1 rule (new)
+
+## Git Commit
+feat: codify PR review patterns from 90-day analysis
+
+Applied 6 rules from PR history analysis (2025-08-01 to 2025-10-30):
+- Strengthened 2 existing rules (SQL injection, bcrypt usage)
+- Created 4 new rules (rate limiting, React keys, etc.)
+- Analyzed 450 comments across 45 PRs
+- 12 patterns identified, 8 approved
+
+Run: 2025-10-30_143022
+
+🤖 Generated with codify-pr-reviews skill
+```
 
 ---
 
