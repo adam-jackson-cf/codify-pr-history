@@ -1,0 +1,49 @@
+{
+  "name": "codify-pr-history-marketplace",
+  "owner": {
+    "name": "Adam Jackson",
+    "email": "adam.jackson@createfuture.com"
+  },
+  "metadata": {
+    "description": "Official marketplace for the Codify PR History plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "codify-pr-reviews",
+      "description": "Analyze GitHub PR review history to identify patterns and generate GitHub Copilot instruction rules that automate recurring review feedback",
+      "version": "1.0.0",
+      "author": {
+        "name": "Adam Jackson",
+        "email": "adam.jackson@createfuture.com",
+        "url": "https://github.com/adam-jackson-cf"
+      },
+      "homepage": "https://github.com/adam-jackson-cf/codify-pr-history",
+      "repository": "https://github.com/adam-jackson-cf/codify-pr-history",
+      "license": "MIT",
+      "keywords": [
+        "github",
+        "code-review",
+        "copilot",
+        "automation",
+        "patterns",
+        "pull-requests",
+        "code-quality",
+        "llm",
+        "analysis"
+      ],
+      "category": "code-quality",
+      "tags": [
+        "automation",
+        "github",
+        "copilot",
+        "code-review"
+      ],
+      "source": {
+        "source": "github",
+        "repo": "adam-jackson-cf/codify-pr-history"
+      },
+      "strict": true
+    }
+  ]
+}
