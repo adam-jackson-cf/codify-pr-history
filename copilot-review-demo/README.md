@@ -17,9 +17,9 @@ This is a **full-stack Task Manager application** built specifically to demonstr
 By the end of this demo, you'll learn how to:
 
 1. Configure GitHub Copilot to enforce your team's coding standards
-2. Create repository-wide, path-scoped, and VS Code custom instructions
+2. Create repository-wide and path-scoped custom instructions
 3. Use structured review prompts for consistent feedback
-4. Set up automatic PR reviews
+4. Set up automatic PR reviews with agentic tool calling
 5. Identify and fix common security vulnerabilities
 6. Apply best practices for React/TypeScript and Node.js/Express
 
@@ -28,17 +28,13 @@ By the end of this demo, you'll learn how to:
 ```
 copilot-review-demo/
 ├── .github/
-│   └── copilot-instructions.md          # Strategy #1: Repository-level rules
-├── .vscode/
-│   ├── settings.json                    # VS Code Copilot configuration
-│   └── rules/                           # Strategy #3: VS Code rule files
-│       ├── general-guidelines.md
-│       ├── security-patterns.md
-│       └── testing-standards.md
+│   ├── copilot-instructions.md          # Strategy #1: Repository-level rules
+│   └── instructions/                    # Strategy #2: Path-scoped rules
+│       ├── backend.instructions.md      # Backend-specific rules
+│       └── frontend.instructions.md    # Frontend-specific rules
 ├── .prompts/
-│   └── code-review.prompt.md            # Strategy #4: Custom review prompts
+│   └── code-review.prompt.md            # Strategy #3: Custom review prompts
 ├── backend/                             # Node.js/Express/TypeScript API
-│   ├── backend.instructions.md          # Strategy #2: Backend path-scoped rules
 │   ├── src/
 │   │   ├── good-examples/              # ✅ Proper implementations
 │   │   │   ├── authService.ts
@@ -50,7 +46,6 @@ copilot-review-demo/
 │   │       └── taskService.bad.ts      # SQL injection vulnerabilities
 │   └── package.json
 ├── frontend/                            # React/TypeScript/Vite
-│   ├── frontend.instructions.md         # Strategy #2: Frontend path-scoped rules
 │   ├── src/
 │   │   ├── good-examples/
 │   │   │   ├── components/
@@ -71,6 +66,15 @@ copilot-review-demo/
 ├── CHEAT-SHEET.md                       # 📝 Quick reference
 └── setup.sh                             # 🚀 Automated setup script
 ```
+
+## 🆕 Latest Features (October 2025)
+
+This demo incorporates the latest GitHub Copilot code review capabilities:
+
+- **Agentic Tool Calling**: Copilot now actively gathers full project context, including code, directory structure, and references
+- **Deterministic Security Tools**: Integration with ESLint and CodeQL for high-signal, consistent security findings
+- **Automated Fixes**: Mention `@copilot` in pull requests to automatically apply suggested fixes
+- **Full Context Awareness**: Reviews understand how changes fit within the broader project architecture
 
 ## 🚀 Quick Start
 
@@ -147,10 +151,10 @@ Use these:
 ### Strategy #2: Path-Scoped Instructions
 
 **Files:**
-- `backend/backend.instructions.md`
-- `frontend/frontend.instructions.md`
+- `.github/instructions/backend.instructions.md`
+- `.github/instructions/frontend.instructions.md`
 
-**Purpose:** Different standards for different parts of the codebase
+**Purpose:** Different standards for different parts of the codebase using `applyTo` frontmatter
 
 **Backend focuses on:**
 - SQL injection prevention
@@ -164,18 +168,9 @@ Use these:
 - Form validation
 - Performance (useCallback, useMemo)
 
-### Strategy #3: VS Code Rule Files
+**Note:** Path-scoped instructions work automatically in VS Code, GitHub.com, and JetBrains without any configuration. The `.vscode/` directory is optional and only needed if you want to organize rules into separate category files for explicit VS Code settings configuration.
 
-**Location:** `.vscode/rules/`
-
-**Purpose:** Organized, reusable rules by category
-
-**Categories:**
-- General guidelines (naming, structure)
-- Security patterns (auth, input validation)
-- Testing standards (AAA pattern, mocking)
-
-### Strategy #4: Custom Review Prompts
+### Strategy #3: Custom Review Prompts
 
 **File:** `.prompts/code-review.prompt.md`
 

@@ -57,7 +57,7 @@ Without custom instructions, Copilot provides general feedback but may miss proj
 
 ## Exercise 2: Add Repository-Level Instructions
 
-**Objective:** Create repository-wide coding standards that apply to all code.
+**Objective:** Review repository-wide coding standards that apply to all code.
 
 ### Steps
 
@@ -91,15 +91,16 @@ Repository-level instructions provide baseline standards that apply everywhere. 
 
 ## Exercise 3: Add Backend Path-Scoped Instructions
 
-**Objective:** Add backend-specific rules for API code.
+**Objective:** Review backend-specific rules for API code.
 
 ### Steps
 
-1. Open `backend/backend.instructions.md` and review the backend-specific rules:
+1. Open `.github/instructions/backend.instructions.md` and review the backend-specific rules:
    - SQL injection prevention
    - HTTP status code requirements
    - Rate limiting requirements
    - Database operation standards
+   - Note the `applyTo: "backend/**/*.ts"` frontmatter that targets backend files
 
 2. Now open the bad task service:
    ```
@@ -119,21 +120,22 @@ Copilot should now catch backend-specific issues:
 
 ### Key Takeaway
 
-Path-scoped instructions let you enforce different standards for different parts of your codebase. Backend code has different concerns (SQL injection, HTTP codes) than frontend code (accessibility, React patterns).
+Path-scoped instructions let you enforce different standards for different parts of your codebase. Backend code has different concerns (SQL injection, HTTP codes) than frontend code (accessibility, React patterns). These files are located in `.github/instructions/` and use `applyTo` frontmatter to target specific file patterns.
 
 ---
 
 ## Exercise 4: Add Frontend Path-Scoped Instructions
 
-**Objective:** Add React/frontend-specific rules.
+**Objective:** Review React/frontend-specific rules.
 
 ### Steps
 
-1. Review `frontend/frontend.instructions.md` for React-specific standards:
+1. Review `.github/instructions/frontend.instructions.md` for React-specific standards:
    - Component prop typing requirements
    - Form validation requirements
    - Accessibility standards
    - React hooks best practices
+   - Note the `applyTo: "frontend/**/*.tsx"` frontmatter that targets frontend files
 
 2. Open the bad frontend component:
    ```
@@ -155,7 +157,7 @@ Copilot should catch frontend-specific issues:
 
 ### Key Takeaway
 
-Frontend code has unique concerns around accessibility, React patterns, and user experience. Path-scoped instructions ensure these are checked specifically for UI code.
+Frontend code has unique concerns around accessibility, React patterns, and user experience. Path-scoped instructions ensure these are checked specifically for UI code. The `applyTo` frontmatter automatically applies these rules to matching files.
 
 ---
 
@@ -302,10 +304,13 @@ Ask Copilot: "What are the key differences between these two implementations?"
 
 ### Exercise 7: Create Your Own Rules
 
-1. Create a new rule file: `.vscode/rules/performance-patterns.md`
+1. Create a new path-scoped instruction file: `.github/instructions/performance.instructions.md`
 
-2. Add rules like:
+2. Add frontmatter and rules:
    ```markdown
+   ---
+   applyTo: "**/*.{ts,tsx}"
+   ---
    # Performance Patterns
 
    - Use React.memo() for expensive components
@@ -314,19 +319,11 @@ Ask Copilot: "What are the key differences between these two implementations?"
    - Avoid inline function definitions in JSX
    ```
 
-3. Add it to `.vscode/settings.json`:
-   ```json
-   {
-     "github.copilot.chat.reviewSelection.instructions": [
-       { "file": ".vscode/rules/general-guidelines.md" },
-       { "file": ".vscode/rules/security-patterns.md" },
-       { "file": ".vscode/rules/testing-standards.md" },
-       { "file": ".vscode/rules/performance-patterns.md" }
-     ]
-   }
-   ```
+3. The file will automatically apply to matching files - no configuration needed!
 
 4. Test on `frontend/src/bad-examples/components/TaskList.bad.tsx`
+
+**Note:** Alternatively, you can use `.vscode/rules/` with `settings.json` for VS Code-specific organization, but this is optional since path-scoped instructions work automatically.
 
 ### Exercise 8: Test on Your Own Code
 
@@ -359,9 +356,11 @@ Ask Copilot: "What are the key differences between these two implementations?"
 ### Organizing Instructions
 
 - **Repository-level** (`.github/copilot-instructions.md`): Error handling, logging, security basics
-- **Path-scoped** (`backend.instructions.md`): API-specific patterns, database rules
-- **Path-scoped** (`frontend.instructions.md`): React patterns, accessibility, UI rules
-- **VS Code rules** (`.vscode/rules/`): Language-specific conventions, testing patterns
+- **Path-scoped** (`.github/instructions/backend.instructions.md`): API-specific patterns, database rules
+- **Path-scoped** (`.github/instructions/frontend.instructions.md`): React patterns, accessibility, UI rules
+- **Custom prompts** (`.prompts/code-review.prompt.md`): Structured review format
+
+**Note:** Repository-level and path-scoped instructions work automatically in VS Code, GitHub.com, and JetBrains without any configuration. The `.vscode/rules/` directory is optional and only needed if you want to organize rules into separate category files for explicit VS Code settings configuration.
 
 ### Limitations to Keep in Mind
 

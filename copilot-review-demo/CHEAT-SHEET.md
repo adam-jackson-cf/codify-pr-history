@@ -20,10 +20,11 @@ code .
 | Level | File Path | Purpose |
 |-------|-----------|---------|
 | **Repository** | `.github/copilot-instructions.md` | Baseline standards for all code |
-| **Backend Path** | `backend/backend.instructions.md` | API-specific rules |
-| **Frontend Path** | `frontend/frontend.instructions.md` | React-specific rules |
-| **VS Code Rules** | `.vscode/rules/*.md` | Organized by category |
+| **Backend Path** | `.github/instructions/backend.instructions.md` | API-specific rules (uses `applyTo` frontmatter) |
+| **Frontend Path** | `.github/instructions/frontend.instructions.md` | React-specific rules (uses `applyTo` frontmatter) |
 | **Custom Prompts** | `.prompts/code-review.prompt.md` | Structured review format |
+
+**Note:** Repository-level and path-scoped instructions work automatically in VS Code, GitHub.com, and JetBrains. The `.vscode/rules/` directory is optional and only needed for explicit VS Code settings configuration.
 
 ---
 
@@ -73,17 +74,16 @@ Check for React best practices violations
 
 ```
 copilot-review-demo/
-├── .github/copilot-instructions.md       # Strategy #1
-├── .vscode/
-│   ├── settings.json                     # Copilot config
-│   └── rules/                            # Strategy #3
-├── .prompts/code-review.prompt.md        # Strategy #4
+├── .github/
+│   ├── copilot-instructions.md           # Strategy #1: Repository-level
+│   └── instructions/
+│       ├── backend.instructions.md       # Strategy #2: Backend path-scoped
+│       └── frontend.instructions.md      # Strategy #2: Frontend path-scoped
+├── .prompts/code-review.prompt.md        # Strategy #3: Custom prompts
 ├── backend/
-│   ├── backend.instructions.md           # Strategy #2
 │   ├── src/good-examples/               # ✅ Learn from these
 │   └── src/bad-examples/                # ❌ Practice on these
 ├── frontend/
-│   ├── frontend.instructions.md          # Strategy #2
 │   ├── src/good-examples/               # ✅ Learn from these
 │   └── src/bad-examples/                # ❌ Practice on these
 └── TUTORIAL.md                           # Start here!
@@ -99,16 +99,12 @@ copilot-review-demo/
 **Use for:** Error handling, logging, security basics
 
 ### 2️⃣ Path-Scoped Instructions
-**Files:** `backend.instructions.md`, `frontend.instructions.md`
-**Applies to:** Specific directories
+**Files:** `.github/instructions/backend.instructions.md`, `.github/instructions/frontend.instructions.md`
+**Applies to:** Specific file patterns (via `applyTo` frontmatter)
 **Use for:** Backend patterns (SQL, APIs) vs Frontend patterns (React, a11y)
+**Note:** Works automatically in VS Code, GitHub.com, and JetBrains
 
-### 3️⃣ VS Code Rule Files
-**Location:** `.vscode/rules/`
-**Applies to:** VS Code environment
-**Use for:** Organized rules by category (security, testing, etc.)
-
-### 4️⃣ Custom Review Prompts
+### 3️⃣ Custom Review Prompts
 **File:** `.prompts/code-review.prompt.md`
 **Applies to:** When explicitly referenced
 **Use for:** Structured, prioritized review output
@@ -289,6 +285,7 @@ Are there any missing edge cases in these tests?
 - **Coding Guidelines:** https://docs.github.com/en/copilot/concepts/code-review/coding-guidelines
 - **VS Code Copilot:** https://code.visualstudio.com/docs/copilot/copilot-customization
 - **Latest Features (Oct 2025):** https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/
+- **Path-Scoped Instructions:** https://github.blog/changelog/2025-09-03-copilot-code-review-path-scoped-custom-instruction-file-support/
 
 ---
 
@@ -331,5 +328,12 @@ Are there any missing edge cases in these tests?
 - **This Demo:** Adapt files to your team's needs
 
 ---
+
+## 🆕 October 2025 Features
+
+- **Agentic Tool Calling**: Copilot actively gathers full project context
+- **Deterministic Security Tools**: Integration with ESLint and CodeQL
+- **Automated Fixes**: Mention `@copilot` in PRs to apply suggested fixes
+- **Full Context Awareness**: Reviews understand project architecture
 
 **Remember:** GitHub Copilot catches ~70% of issues. It's a powerful first pass, but not a replacement for human review!
