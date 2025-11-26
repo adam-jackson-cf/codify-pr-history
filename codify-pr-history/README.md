@@ -28,6 +28,7 @@ that's a signal: something should be caught automatically. This plugin:
 - 🕐 **Timestamped Runs**: Preserves every analysis for historical comparison
 - 🔴 **Red Flag Detection**: Always surfaces critical issues regardless of frequency
 - 📈 **Pattern Evolution**: Track if patterns improve after applying rules
+- 📝 **Best Practices Aligned**: Generates rules following GitHub Copilot's latest best practices (October 2025), including path-scoped instructions, file length limits, and recommended structure templates
 
 ## Quick Start
 
@@ -71,6 +72,17 @@ The plugin will guide you through:
 - `gh` CLI installed and authenticated
 - Git repository with PR history
 - GitHub Copilot instruction files (or will create them)
+
+## GitHub Copilot Integration
+
+This plugin generates custom instructions that work with GitHub Copilot's latest code review capabilities (October 2025):
+
+- **Agentic Tool Calling**: Copilot now uses agentic tool calling to gather full project context, making custom instructions more effective
+- **Deterministic Security Tools**: Integrates with ESLint and CodeQL for high-signal, consistent security findings
+- **Path-Scoped Instructions**: Supports creating targeted instruction files for specific file patterns (e.g., `**/*.ts`, `**/*.tsx`)
+- **File Length Optimisation**: Ensures instruction files stay under 4000 characters for optimal effectiveness
+
+The generated rules follow GitHub's recommended structure and best practices, maximising Copilot's ~70% adherence rate.
 
 ## How It Works
 

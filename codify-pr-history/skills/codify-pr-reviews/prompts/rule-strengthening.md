@@ -36,6 +36,8 @@ Generate enhancements to strengthen an existing rule based on identified gaps.
 3. **Follow existing format** - Match the style of the current rule
 4. **Add subsections** - Use ### for additional examples
 5. **Include examples** - Bad/good code for new cases
+6. **Use positive directives** - ALWAYS use positive phrasing ("Use X" not "Don't use Y")
+7. **Be specific** - Include concrete details, not vague advice
 
 ## Example
 
@@ -61,3 +63,18 @@ Generate enhancements to strengthen an existing rule based on identified gaps.
 ```
 
 Focus on practical, code-based improvements with clear examples.
+
+## Positive Directives (CRITICAL)
+
+**ALWAYS use positive directives** when adding enhancements:
+
+❌ Avoid: "Don't use string concatenation in LIKE queries"
+✅ Good: "Use parameterized queries with ? placeholders for LIKE queries, including wildcards"
+
+❌ Avoid: "Never forget to handle errors"
+✅ Good: "Always wrap async operations in try-catch blocks"
+
+❌ Avoid: "Don't use any type"
+✅ Good: "Use specific types or unknown instead of any"
+
+**Why**: Positive directives are more actionable and help Copilot generate better code. This is essential for effective Copilot instructions.

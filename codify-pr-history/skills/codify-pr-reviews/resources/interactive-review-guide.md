@@ -717,6 +717,104 @@ This is unusually high for a covered rule.
 
 ---
 
+## Alternative: Using Copilot Coding Agent for Instruction File Editing
+
+GitHub Copilot provides a **Copilot Coding Agent** that can help edit and improve existing custom instruction files. This can be used as an alternative or supplement to this plugin's rule generation.
+
+### Workflow
+
+1. **Navigate to the agents page** at `github.com/copilot/agents`
+2. **Select repository and branch** using the dropdown menu in the prompt field
+3. **Use the revision prompt** (see template below)
+4. **Start the task** — Copilot will create a draft pull request, modify your custom instructions, push them to the branch, and add you as a reviewer
+
+### Prompt Template for Revising Instructions
+
+Copy and customise this prompt for your use case. **Important:** Modify the first sentence to specify which instruction files you want to edit:
+
+```
+Review and revise my existing [NAME-OF-INSTRUCTION-FILES] files. Preserve my file's meaning and intention—do NOT make unnecessary changes or edits. Only make improvements where needed, specifically:
+
+- Remove unsupported or redundant content.  
+  Unsupported content includes:
+  - instructions to change Copilot code review comment formatting (font, font size, adding headers, etc)
+  - instructions to change "PR Overview" comment content
+  - instructions for product behaviour changes outside of existing code review functionality (like trying to block a pull request from merging)
+  - Vague, non-specific directives like "be more accurate", "identify all issues" or similar
+  - Directives to "follow links" or inclusion of any external links
+- Reformat sections for clarity if they do not have any structure. 
+  - If my file does not have any structure, reformat into the structure below or similar, depending on the topics covered in the file. 
+  - Do not change the intent or substance of the original content unless the content is not supported.
+- Organise content with section headings and bullet points or numbered lists.
+- Add sample code blocks if clarification is needed and they are missing.
+- When applicable, separate language-specific rules into path-specific instructions files with the format `NAME.instructions.md`, with the `applyTo` property, if not already done.
+- If the file is over 4000 characters long, prioritise shortening the file by identifying redundant instructions, instructions that could be summarised, and instructions that can be removed due to being unsupported. 
+
+**Example Structure:**
+
+# [Language] Coding Standards
+
+Guidelines for [language] code reviews with Copilot.
+
+## Naming Conventions
+- Use `snake_case` for functions and variables.
+- Use `PascalCase` for class names.
+
+## Code Style
+- Prefer list comprehensions for simple loops.
+- Limit lines to 80 characters.
+
+## Error Handling
+- Catch specific exceptions, not bare `except:`.
+- Add error messages when raising exceptions.
+
+## Testing
+- Name test files as `test_*.py`.
+- Use `pytest` for tests.
+
+## Example
+
+```[language]
+# Good
+def calculate_total(items):
+    return sum(items)
+
+# Bad
+def CalculateTotal(Items):
+    total = 0
+    for item in Items:
+        total += item
+    return total
+```
+
+---
+
+### Framework-Specific Rules
+- For Django, use class-based views when possible.
+
+### Advanced Tips & Edge Cases
+- Use type hints for function signatures.
+```
+
+**Note:** This prompt is specifically tailored for instruction files meant for Copilot code review. Using it for instruction files meant for other agents may result in unwanted edits.
+
+### When to Use Copilot Coding Agent
+
+- **Editing existing instruction files** that need refinement
+- **Removing unsupported content** from instruction files
+- **Reorganising** instruction files to follow recommended structure
+- **Splitting large files** into path-scoped instruction files
+- **Cleaning up** instruction files that have grown too long (>4000 characters)
+
+### When to Use This Plugin
+
+- **Generating new rules** from PR review history
+- **Identifying patterns** in code review comments
+- **Systematic analysis** of review feedback over time
+- **Tracking pattern evolution** across multiple runs
+
+Both tools can be used together: use this plugin to identify and generate new rules, then use Copilot Coding Agent to refine and maintain instruction files.
+
 ## See Also
 
 - [workflow-overview.md](workflow-overview.md) - Complete workflow

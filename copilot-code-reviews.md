@@ -64,6 +64,75 @@ Use `*.instructions.md` files with an `applyTo` section to target specific direc
 - Create `frontend.instructions.md` with targeted rules
 - Apply to specific paths like `/src/components/*.tsx`
 
+**Complete Example: TypeScript Instructions File**
+
+Here's a complete example of a path-specific instruction file for TypeScript:[^11]
+
+```markdown
+---
+applyTo: "**/*.ts"
+---
+# TypeScript Coding Standards
+This file defines our TypeScript coding conventions for Copilot code review.
+
+## Naming Conventions
+
+- Use `camelCase` for variables and functions.
+- Use `PascalCase` for class and interface names.
+- Prefix private variables with `_`.
+
+## Code Style
+
+- Prefer `const` over `let` when variables are not reassigned.
+- Use arrow functions for anonymous callbacks.
+- Avoid using `any` type; specify more precise types whenever possible.
+- Limit line length to 100 characters.
+
+## Error Handling
+
+- Always handle promise rejections with `try/catch` or `.catch()`.
+- Use custom error classes for application-specific errors.
+
+## Testing
+
+- Write unit tests for all exported functions.
+- Use [Jest](https://jestjs.io/) for all testing.
+- Name test files as `<filename>.test.ts`.
+
+## Example
+
+```typescript
+// Good
+interface User {
+  id: number;
+  name: string;
+}
+
+const fetchUser = async (id: number): Promise<User> => {
+  try {
+    // ...fetch logic
+  } catch (error) {
+    // handle error
+  }
+};
+
+// Bad
+interface user {
+  Id: number;
+  Name: string;
+}
+
+async function FetchUser(Id) {
+  // ...fetch logic, no error handling
+}
+```
+```
+
+**Key points:**
+- The `applyTo` property in the frontmatter uses glob patterns to target specific files
+- Place path-specific instruction files in `.github/instructions/` directory
+- Multiple path-specific files can coexist, each targeting different parts of the codebase
+
 [^2]: [Copilot code review: Path-scoped custom instruction file support](https://github.blog/changelog/2025-09-03-copilot-code-review-path-scoped-custom-instruction-file-support/)
 
 #### 3. Organization-Level Instructions
@@ -203,10 +272,163 @@ Organize rules into focused documents:[^8]
 └── commit-messages.md        # VCS conventions
 ```
 
+#### Recommended Structure Template
+
+For repository-wide or path-specific instruction files, use this recommended structure:[^11]
+
+```markdown
+---
+applyTo: "**/*.ts"  # For path-specific files only
+---
+# [Language/Framework] Coding Standards
+
+Brief description of what this file defines for Copilot code review.
+
+## Naming Conventions
+- [Add rules here.]
+
+## Code Style
+- [Add rules here.]
+
+## Error Handling
+- [Add rules here.]
+
+## Testing
+- [Add rules here.]
+
+## Security
+- [Add rules here.]
+
+---
+
+## Code Examples
+```[language]
+// Correct pattern
+function myFunction() { ... }
+
+// Incorrect pattern
+function My_function() { ... }
+```
+
+---
+
+## [Optional] Task-Specific or Advanced Sections
+
+### Framework-Specific Rules
+- [Add any relevant rules for frameworks, libraries, or tooling.]
+
+### Advanced Tips & Edge Cases
+- [Document exceptions, advanced patterns, or important caveats.]
+```
+
+**Key points:**
+- Start with a brief description of the file's purpose
+- Organise rules into logical sections (Naming, Style, Error Handling, Testing, Security)
+- Include code examples showing correct vs. incorrect patterns
+- Add optional sections for framework-specific rules or edge cases
+- For path-specific files, include the `applyTo` frontmatter property
+
 #### Keep Instructions Short and Self-Contained
 "The instructions you add to the file should be short, self-contained statements that add context or relevant information."[^1]
 
+#### File Length Considerations
+If your instruction file exceeds **4000 characters**, prioritise shortening it by identifying redundant instructions, instructions that could be summarised, and instructions that can be removed due to being unsupported.[^11] Shorter, focused files tend to be more effective.
+
+#### What NOT to Include
+
+The following types of content are **not supported** and should be avoided in custom instructions:[^11]
+
+- **Comment formatting directives** — Instructions to change Copilot code review comment formatting (font, font size, adding headers, etc.)
+- **PR Overview modifications** — Instructions to change "PR Overview" comment content
+- **Product behaviour changes** — Instructions for product behaviour changes outside of existing code review functionality (e.g., trying to block a pull request from merging)
+- **Vague, non-specific directives** — Avoid directives like "be more accurate", "identify all issues", or similar non-actionable instructions
+- **External links or references** — Directives to "follow links" or inclusion of any external links (instructions should be self-contained)
+
+**Best practice:** Focus on code review criteria and coding standards rather than attempting to customise the review interface or workflow.
+
 [^8]: [Enforcing .NET Coding Guidelines with GitHub Copilot Custom Instructions](https://nikiforovall.blog/productivity/2025/03/08/github-copilot-instructions-for-dotnet.html)
+[^11]: [Unlocking the full power of Copilot code review: Master your instructions files](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)
+
+### Editing Existing Custom Instructions
+
+If you have existing custom instructions that need revision, you can use **Copilot Coding Agent** to help edit and improve them:[^11]
+
+#### Workflow
+
+1. **Navigate to the agents page** at `github.com/copilot/agents`
+2. **Select repository and branch** using the dropdown menu in the prompt field
+3. **Use the revision prompt** (see template below)
+4. **Start the task** — Copilot will create a draft pull request, modify your custom instructions, push them to the branch, and add you as a reviewer
+
+#### Prompt Template for Revising Instructions
+
+Copy and customise this prompt for your use case. **Important:** Modify the first sentence to specify which instruction files you want to edit:[^11]
+
+```
+Review and revise my existing [NAME-OF-INSTRUCTION-FILES] files. Preserve my file's meaning and intention—do NOT make unnecessary changes or edits. Only make improvements where needed, specifically:
+
+- Remove unsupported or redundant content.  
+  Unsupported content includes:
+  - instructions to change Copilot code review comment formatting (font, font size, adding headers, etc)
+  - instructions to change "PR Overview" comment content
+  - instructions for product behaviour changes outside of existing code review functionality (like trying to block a pull request from merging)
+  - Vague, non-specific directives like "be more accurate", "identify all issues" or similar
+  - Directives to "follow links" or inclusion of any external links
+- Reformat sections for clarity if they do not have any structure. 
+  - If my file does not have any structure, reformat into the structure below or similar, depending on the topics covered in the file. 
+  - Do not change the intent or substance of the original content unless the content is not supported.
+- Organise content with section headings and bullet points or numbered lists.
+- Add sample code blocks if clarification is needed and they are missing.
+- When applicable, separate language-specific rules into path-specific instructions files with the format `NAME.instructions.md`, with the `applyTo` property, if not already done.
+- If the file is over 4000 characters long, prioritise shortening the file by identifying redundant instructions, instructions that could be summarised, and instructions that can be removed due to being unsupported. 
+
+**Example Structure:**
+
+# [Language] Coding Standards
+
+Guidelines for [language] code reviews with Copilot.
+
+## Naming Conventions
+- Use `snake_case` for functions and variables.
+- Use `PascalCase` for class names.
+
+## Code Style
+- Prefer list comprehensions for simple loops.
+- Limit lines to 80 characters.
+
+## Error Handling
+- Catch specific exceptions, not bare `except:`.
+- Add error messages when raising exceptions.
+
+## Testing
+- Name test files as `test_*.py`.
+- Use `pytest` for tests.
+
+## Example
+
+```[language]
+# Good
+def calculate_total(items):
+    return sum(items)
+
+# Bad
+def CalculateTotal(Items):
+    total = 0
+    for item in Items:
+        total += item
+    return total
+```
+
+---
+
+### Framework-Specific Rules
+- For Django, use class-based views when possible.
+
+### Advanced Tips & Edge Cases
+- Use type hints for function signatures.
+```
+
+**Note:** This prompt is specifically tailored for instruction files meant for Copilot code review. Using it for instruction files meant for other agents may result in unwanted edits.
 
 ### Advanced: Custom Prompt Files
 
@@ -400,6 +622,7 @@ Based on recommendations for organizational AI policies:[^9]
 
 ### GitHub Blog Posts
 
+- [Unlocking the full power of Copilot code review: Master your instructions files](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/) - Comprehensive guide to writing effective custom instructions[^11]
 - [How to use GitHub Copilot to level up your code reviews and pull requests](https://github.blog/ai-and-ml/github-copilot/how-to-use-github-copilot-to-level-up-your-code-reviews-and-pull-requests/) - Best practices overview
 - [Accelerating pull requests in your company with GitHub Copilot](https://docs.github.com/en/copilot/tutorials/roll-out-at-scale/drive-downstream-impact/accelerate-pull-requests) - Enterprise rollout guide
 
@@ -424,6 +647,7 @@ Based on recommendations for organizational AI policies:[^9]
 
 ### Additional Resources
 
+- [awesome-copilot repository](https://github.com/github/awesome-copilot) - Curated collection of Copilot instructions examples and resources
 - [Code Reviews With Github Copilot - Fixing, Optimizing, and Adhering to Standards](https://envitics.com/code-reviews-with-github-copilot/) - Optimization focus
 - [How to Use GitHub Copilot for Coding Review and Development](https://www.index.dev/blog/github-copilot-for-coding-review) - Development workflow
 - [Responsible use of GitHub Copilot code review](https://docs.github.com/en/copilot/responsible-use/code-review) - Ethical considerations
@@ -432,7 +656,7 @@ Based on recommendations for organizational AI policies:[^9]
 
 ## Key Takeaways
 
-1. **Custom instructions are essential** for enforcing team standards — use `copilot-instructions.md` files at repository and organization levels
+1. **Custom instructions are essential** for enforcing team standards — use `copilot-instructions.md` files at repository and organisation levels
 
 2. **The October 2025 updates are significant** — agentic tool calling and integration with CodeQL/ESLint make reviews more contextually aware and security-focused
 
@@ -444,7 +668,13 @@ Based on recommendations for organizational AI policies:[^9]
 
 6. **Pre-PR self-reviews are highly valuable** — catching issues before human reviewers saves significant time
 
-7. **The feature is actively evolving** — stay current with GitHub's changelog for new capabilities
+7. **Avoid unsupported content** — Don't include instructions for comment formatting, PR Overview changes, product behaviour modifications, vague directives, or external links
+
+8. **Keep files concise** — If instruction files exceed 4000 characters, prioritise shortening by removing redundant or unsupported content
+
+9. **Use Copilot Coding Agent for editing** — Leverage the agent to help revise and improve existing instruction files using the provided prompt template
+
+10. **The feature is actively evolving** — stay current with GitHub's changelog for new capabilities
 
 ---
 

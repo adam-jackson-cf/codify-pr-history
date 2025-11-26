@@ -20,10 +20,13 @@ You will receive:
    - Red flag status
 
 2. **Existing Copilot instruction file paths**:
-   - `.github/copilot-instructions.md`
-   - `backend/backend.instructions.md`
-   - `frontend/frontend.instructions.md`
-   - `.vscode/rules/*.md`
+   - `.github/copilot-instructions.md` (repository-level)
+   - `backend/backend.instructions.md` (backend-specific)
+   - `frontend/frontend.instructions.md` (frontend-specific)
+   - `.github/instructions/*.instructions.md` (path-scoped files with `applyTo` frontmatter)
+   - `.vscode/rules/*.md` (VS Code specific rules)
+
+**Note on path-scoped files**: Files in `.github/instructions/` may have `applyTo` frontmatter specifying which file patterns they target (e.g., `**/*.ts`, `**/*.tsx`). When checking for existing rules, consider both the file path and the `applyTo` pattern.
 
 3. **Configuration**:
    - Categories list

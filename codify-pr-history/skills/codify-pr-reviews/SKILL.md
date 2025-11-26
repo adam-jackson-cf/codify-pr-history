@@ -76,6 +76,7 @@ Transforms PR review comment history into automated GitHub Copilot instructions 
 ### Stage 6: Generate Rules
 **Purpose**: Create new rules or enhance existing ones with concrete examples
 **Details**: [rule-generation-guide.md](resources/rule-generation-guide.md)
+**Note**: Rule generation checks file length (4000 character limit) and may recommend splitting into path-scoped instruction files
 
 ### Stage 7: Interactive Rule Wording Review
 **Purpose**: Review and approve generated rule wording before application
@@ -157,6 +158,23 @@ copilot-instructions.md files (modified)
 ```
 
 **Token efficiency**: 50k → 2k tokens in main conversation (96% reduction through subagent isolation)
+
+---
+
+## GitHub Copilot Best Practices
+
+This skill generates rules aligned with GitHub Copilot's latest best practices (October 2025):
+
+- **Path-Scoped Instructions**: Creates `.github/instructions/*.instructions.md` files with `applyTo` frontmatter for targeted rules
+- **File Length Limits**: Monitors and warns when instruction files approach 4000 character limit
+- **Unsupported Content Validation**: Prevents generation of unsupported content types (formatting directives, PR Overview changes, etc.)
+- **Recommended Structure**: Follows GitHub's recommended template structure for optimal effectiveness
+- **Positive Directives**: Emphasises positive phrasing ("Use X" not "Don't use Y") for better Copilot adherence
+
+**New Copilot Capabilities** (October 2025):
+- Agentic tool calling for full project context awareness
+- Integration with deterministic security tools (CodeQL, ESLint)
+- Enhanced effectiveness when combined with well-structured custom instructions
 
 ---
 

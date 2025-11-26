@@ -30,10 +30,13 @@ Return a JSON object with the following structure:
     "content": "The actual markdown content to add to the instruction file",
     "targetFile": "repository" | "backend" | "frontend" | "vscode-security" | "vscode-general" | "vscode-testing",
     "placement": "Suggested location within the target file",
-    "rationale": "Why this rule should be added and which file is most appropriate"
+    "rationale": "Why this rule should be added and which file is most appropriate",
+    "applyTo": "Optional glob pattern for path-scoped files (e.g., '**/*.ts', '**/*.tsx')"
   }
 }
 ```
+
+**Note on `applyTo`**: Only include this property if creating a new path-scoped instruction file (`.github/instructions/*.instructions.md`). For existing files or repository-level files, omit this property.
 
 ## Rule Writing Guidelines
 
@@ -84,6 +87,22 @@ The instruction files already have established patterns:
 - Broad principles that apply everywhere
 - Cross-cutting concerns (error handling, logging, security basics)
 - 2-3 sentences per rule
+- No frontmatter required
+
+**Path-scoped** (`.github/instructions/*.instructions.md`):
+
+- Target specific file patterns using `applyTo` frontmatter
+- Use glob patterns like `**/*.ts`, `**/*.tsx`, `backend/**/*.js`
+- More focused than repository-level files
+- Must include frontmatter with `applyTo` property
+- Example:
+  ```markdown
+  ---
+  applyTo: "**/*.ts"
+  ---
+  # TypeScript Coding Standards
+  ...
+  ```
 
 **Backend** (`backend/backend.instructions.md`):
 
@@ -91,6 +110,7 @@ The instruction files already have established patterns:
 - Database security
 - HTTP conventions
 - More detailed with examples
+- Can use path-scoped format with `applyTo` if targeting specific backend files
 
 **Frontend** (`frontend/frontend.instructions.md`):
 
@@ -98,6 +118,7 @@ The instruction files already have established patterns:
 - Accessibility requirements
 - UI/UX conventions
 - TypeScript for components
+- Can use path-scoped format with `applyTo` if targeting specific frontend files
 
 **VS Code Rules** (`.vscode/rules/*.md`):
 
@@ -121,6 +142,7 @@ Choose the most appropriate file based on scope:
 - Git commit message formats
 - General TypeScript usage
 - Universal security principles
+- Rules that apply across the entire codebase
 
 **Use `backend`** for:
 
@@ -130,6 +152,7 @@ Choose the most appropriate file based on scope:
 - Authentication/authorization
 - Server-side validation
 - Rate limiting
+- Backend-specific patterns
 
 **Use `frontend`** for:
 
@@ -139,6 +162,7 @@ Choose the most appropriate file based on scope:
 - Client-side validation
 - Performance optimizations
 - UI state management
+- Frontend-specific patterns
 
 **Use `vscode-security`** for:
 
@@ -160,6 +184,15 @@ Choose the most appropriate file based on scope:
 - Coverage requirements
 - Mocking strategies
 - Test naming conventions
+
+**Consider Path-Scoped Files** (`.github/instructions/*.instructions.md`):
+
+When a rule applies to a specific file pattern (e.g., only TypeScript files, only test files), consider creating a path-scoped instruction file:
+- Use `applyTo` frontmatter with glob pattern
+- Place in `.github/instructions/` directory
+- Name format: `{name}.instructions.md` (e.g., `typescript.instructions.md`, `tests.instructions.md`)
+- More targeted than repository-level files
+- Useful when rules are language-specific or framework-specific
 
 ## Example Rule Generation
 
@@ -192,6 +225,29 @@ Choose the most appropriate file based on scope:
 }
 ```
 
+## File Length Considerations
+
+**Important**: Instruction files should be kept under 4000 characters for optimal effectiveness.
+
+- Check the current file length before adding new rules
+- If a file exceeds 4000 characters, consider:
+  - Splitting into path-scoped instruction files (`.github/instructions/*.instructions.md`)
+  - Removing redundant or less critical rules
+  - Summarising overlapping instructions
+- Prioritise shortening files that are too long before adding new content
+
+## Unsupported Content
+
+**DO NOT include** the following types of content in custom instructions:
+
+- ❌ **Comment formatting directives** - Instructions to change Copilot code review comment formatting (font, font size, adding headers, etc.)
+- ❌ **PR Overview modifications** - Instructions to change "PR Overview" comment content
+- ❌ **Product behaviour changes** - Instructions for product behaviour changes outside of existing code review functionality (e.g., trying to block a pull request from merging)
+- ❌ **Vague, non-specific directives** - Avoid directives like "be more accurate", "identify all issues", or similar non-actionable instructions
+- ❌ **External links or references** - Directives to "follow links" or inclusion of any external links (instructions should be self-contained)
+
+**Focus on**: Code review criteria and coding standards rather than attempting to customise the review interface or workflow.
+
 ## Quality Checklist
 
 Before returning the rule, verify:
@@ -205,6 +261,9 @@ Before returning the rule, verify:
 - [ ] Target file is the most logical location
 - [ ] Rule doesn't duplicate existing instructions
 - [ ] Content is formatted as valid markdown
+- [ ] Does NOT include unsupported content (formatting directives, PR Overview changes, product behaviour changes, vague directives, external links)
+- [ ] File length considerations addressed (if target file is near 4000 characters)
+- [ ] If creating path-scoped file, includes proper `applyTo` frontmatter with glob pattern
 
 ## Important Notes
 
@@ -221,5 +280,21 @@ frontend uses React, examples should be React code.
 
 5. **Research-Backed**: Reference the research document (copilot-code-reviews.md) which shows ~70%
 adherence. Write rules that are clear enough to maximize that adherence rate.
+
+6. **Recommended Structure**: When creating new instruction files, follow this structure:
+   - Brief description of the file's purpose
+   - Naming Conventions
+   - Code Style
+   - Error Handling
+   - Testing
+   - Security
+   - Code Examples (Good/Bad patterns)
+   - Optional: Framework-Specific Rules
+   - Optional: Advanced Tips & Edge Cases
+
+7. **Path-Scoped Files**: When creating path-scoped instruction files (`.github/instructions/*.instructions.md`):
+   - Include `applyTo` frontmatter with glob pattern
+   - Place in `.github/instructions/` directory
+   - Use descriptive names (e.g., `typescript.instructions.md`, `backend-api.instructions.md`)
 
 Now generate a Copilot instruction rule from the provided pattern.

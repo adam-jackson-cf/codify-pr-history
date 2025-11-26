@@ -181,7 +181,8 @@ Parse all Copilot instruction files:
 
 **Files scanned**:
 
-- `.github/copilot-instructions.md` (repository-level)
+- `.github/copilot-instructions.md` (repository-level - applies to entire codebase)
+- `.github/instructions/*.instructions.md` (path-scoped - applies to specific file patterns via `applyTo` frontmatter)
 - `backend/backend.instructions.md` (backend-specific)
 - `frontend/frontend.instructions.md` (frontend-specific)
 - `.vscode/rules/*.md` (VS Code rules)
