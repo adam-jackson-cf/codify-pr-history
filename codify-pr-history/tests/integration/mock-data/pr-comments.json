@@ -1,0 +1,210 @@
+{
+  "fetchedAt": "2025-11-26T13:35:00Z",
+  "repository": "test-org/test-repo",
+  "dateRange": {
+    "start": "2025-10-27",
+    "end": "2025-11-26"
+  },
+  "totalPRs": 8,
+  "totalComments": 15,
+  "pullRequests": [
+    {
+      "number": 101,
+      "title": "Add user search feature",
+      "author": "developer1",
+      "createdAt": "2025-11-15T10:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1001,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "SQL injection vulnerability here - you're concatenating user input directly into the query string. Use parameterized queries with ? placeholders instead.",
+          "path": "backend/search.ts",
+          "line": 45,
+          "createdAt": "2025-11-15T14:30:00Z"
+        },
+        {
+          "id": 1002,
+          "type": "review",
+          "author": "reviewer2",
+          "body": "Missing error handling - this async operation should be wrapped in try-catch.",
+          "path": "backend/search.ts",
+          "line": 52,
+          "createdAt": "2025-11-15T15:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 102,
+      "title": "Implement task filtering",
+      "author": "developer2",
+      "createdAt": "2025-11-18T09:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1003,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "This LIKE query is vulnerable to SQL injection. The search term should be parameterized, not concatenated.",
+          "path": "backend/tasks.ts",
+          "line": 78,
+          "createdAt": "2025-11-18T11:20:00Z"
+        },
+        {
+          "id": 1004,
+          "type": "review",
+          "author": "reviewer3",
+          "body": "Missing key prop in this React list. Each child in a list should have a unique 'key' prop.",
+          "path": "frontend/TaskList.tsx",
+          "line": 23,
+          "createdAt": "2025-11-18T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 103,
+      "title": "Add authentication endpoints",
+      "author": "developer1",
+      "createdAt": "2025-11-20T08:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1005,
+          "type": "review",
+          "author": "reviewer2",
+          "body": "You're using bcrypt.hashSync which blocks the event loop. Use bcrypt.hash (async) instead with at least 10 salt rounds.",
+          "path": "backend/auth.ts",
+          "line": 34,
+          "createdAt": "2025-11-20T10:15:00Z"
+        },
+        {
+          "id": 1006,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "Add rate limiting to this login endpoint - it's vulnerable to brute force attacks. Suggest 5 attempts per 15 minutes.",
+          "path": "backend/auth.ts",
+          "line": 56,
+          "createdAt": "2025-11-20T11:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 104,
+      "title": "User management UI",
+      "author": "developer3",
+      "createdAt": "2025-11-21T13:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1007,
+          "type": "review",
+          "author": "reviewer3",
+          "body": "React key warning - you're using array index as key which can cause issues. Use the user ID instead.",
+          "path": "frontend/UserList.tsx",
+          "line": 18,
+          "createdAt": "2025-11-21T15:30:00Z"
+        },
+        {
+          "id": 1008,
+          "type": "review",
+          "author": "reviewer2",
+          "body": "No error handling on this API call. Wrap in try-catch and show user-friendly error message.",
+          "path": "frontend/UserList.tsx",
+          "line": 45,
+          "createdAt": "2025-11-21T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 105,
+      "title": "Bulk operations for tasks",
+      "author": "developer2",
+      "createdAt": "2025-11-22T10:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1009,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "SQL injection in the IN clause - you're joining the IDs directly. Use placeholders: const placeholders = ids.map(() => '?').join(',');",
+          "path": "backend/tasks.ts",
+          "line": 112,
+          "createdAt": "2025-11-22T12:00:00Z"
+        },
+        {
+          "id": 1010,
+          "type": "review",
+          "author": "reviewer3",
+          "body": "Need try-catch around this database operation.",
+          "path": "backend/tasks.ts",
+          "line": 120,
+          "createdAt": "2025-11-22T13:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 106,
+      "title": "Password reset feature",
+      "author": "developer1",
+      "createdAt": "2025-11-23T09:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1011,
+          "type": "review",
+          "author": "reviewer2",
+          "body": "Using bcryptSync here - switch to async bcrypt.hash to avoid blocking. Also make sure you're using at least 10 rounds.",
+          "path": "backend/password.ts",
+          "line": 67,
+          "createdAt": "2025-11-23T11:00:00Z"
+        },
+        {
+          "id": 1012,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "Password reset endpoint needs rate limiting to prevent abuse. Limit to 3 attempts per hour.",
+          "path": "backend/password.ts",
+          "line": 89,
+          "createdAt": "2025-11-23T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 107,
+      "title": "Update task sorting query",
+      "author": "developer3",
+      "createdAt": "2025-11-24T14:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1013,
+          "type": "review",
+          "author": "reviewer1",
+          "body": "Dynamic ORDER BY with string concatenation is a SQL injection risk. Whitelist the allowed column names instead.",
+          "path": "backend/tasks.ts",
+          "line": 145,
+          "createdAt": "2025-11-24T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "number": 108,
+      "title": "Task tags component",
+      "author": "developer2",
+      "createdAt": "2025-11-25T10:00:00Z",
+      "state": "merged",
+      "comments": [
+        {
+          "id": 1014,
+          "type": "review",
+          "author": "reviewer3",
+          "body": "Missing key prop on these tag elements. Use tag.id as the key.",
+          "path": "frontend/TaskTags.tsx",
+          "line": 34,
+          "createdAt": "2025-11-25T12:00:00Z"
+        }
+      ]
+    }
+  ]
+}

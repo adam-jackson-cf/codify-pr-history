@@ -44,12 +44,17 @@ recurring patterns and generate GitHub Copilot custom instruction rules.
 
 ### Workflow
 
+0. **Preflight Check** (before full analysis)
+   - Verifies gh CLI authentication
+   - Detects repository from git remote
+   - Tests fetch with 5 sample comments
+   - **USER CONFIRMATION**: Review preflight results before proceeding
+
 1. **Stack Analysis** (first run / --refresh-stack)
    - Detects tech stack (Express, React, TypeScript, etc.)
    - Generates red flag patterns (SQL injection, hardcoded secrets, etc.)
 
-2. **Fetch PR Comments** (via gh CLI)
-   - Auto-detects repository from git remote
+2. **Fetch PR Comments** (via gh CLI - after preflight approved)
    - Fetches all PR comments from last N days
    - Filters by author (excludes bots) and length
 
@@ -67,6 +72,7 @@ recurring patterns and generate GitHub Copilot custom instruction rules.
      - 🔴 New rule needed (no existing coverage)
 
 5. **Interactive Pattern Review**
+   - **USER CONFIRMATION**: Review EACH pattern (one by one)
    - Shows each pattern with triage decision
    - You approve/modify/skip each one
 
@@ -74,12 +80,15 @@ recurring patterns and generate GitHub Copilot custom instruction rules.
    - Creates new rules OR strengthens existing
    - Includes good/bad code examples
    - Determines target file (backend/frontend/repository)
+   - Supports path-scoped instruction files with applyTo frontmatter
 
 7. **Interactive Wording Review**
+   - **USER CONFIRMATION**: Review EACH rule's markdown (one by one)
    - Shows generated markdown content
    - You approve/edit/reject each rule
 
 8. **Apply Rules**
+   - **USER CONFIRMATION**: Final approval before file modifications
    - Edits Copilot instruction files
    - Creates git commit with summary
 

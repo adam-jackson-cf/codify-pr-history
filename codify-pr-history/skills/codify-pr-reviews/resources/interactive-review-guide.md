@@ -4,6 +4,29 @@ Guide to the two interactive review stages: pattern approval and rule wording ap
 
 ---
 
+## ⚠️ ENFORCEMENT: These Reviews are MANDATORY, Not Optional
+
+The pattern and rule review stages are **MANDATORY STOP POINTS** where you must use the AskUserQuestion tool:
+
+**You MUST:**
+
+1. **Use AskUserQuestion** (not just describe options to the user)
+2. **Wait for actual user response** before proceeding
+3. **Process ONE item at a time** - never batch multiple patterns/rules into a single question
+4. **Record each decision** before moving to the next item
+5. **Never skip or assume approval** - explicit confirmation is required
+
+**You MUST NOT:**
+
+- Present all patterns/rules at once and ask for batch approval
+- Describe what "could be done" without actually asking
+- Skip checkpoints because you think they're obvious
+- Proceed without explicit user confirmation
+
+**Why this matters:** This skill modifies critical instruction files that affect code review behavior. Every pattern and rule must be individually reviewed and approved to ensure quality and relevance.
+
+---
+
 ## Overview
 
 The skill has TWO interactive review stages:

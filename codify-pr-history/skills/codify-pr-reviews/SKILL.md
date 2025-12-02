@@ -59,6 +59,14 @@ Transforms PR review comment history into automated GitHub Copilot instructions 
 
 ### Stage 2: Fetch PR Comments
 **Purpose**: Retrieve PR comments via gh CLI with intelligent filtering
+
+**Process**:
+1. Invoke pr-comment-fetcher agent with **preflight check**
+2. Agent returns preflight results (auth status, repo detection, sample count)
+3. **MANDATORY CHECKPOINT 1**: Use AskUserQuestion to confirm preflight results
+4. If approved, proceed with full fetch; otherwise stop
+5. Agent returns full PR comment data
+
 **Details**: [fetching-guide.md](resources/fetching-guide.md)
 
 ### Stage 3: Preprocess & Deduplicate
@@ -71,6 +79,9 @@ Transforms PR review comment history into automated GitHub Copilot instructions 
 
 ### Stage 5: Interactive Pattern Review
 **Purpose**: Review identified patterns and decide on actions (create/strengthen/skip)
+
+**MANDATORY CHECKPOINT 2**: For EACH pattern, use AskUserQuestion to get user's decision.
+
 **Details**: [interactive-review-guide.md](resources/interactive-review-guide.md)
 
 ### Stage 6: Generate Rules
@@ -80,11 +91,90 @@ Transforms PR review comment history into automated GitHub Copilot instructions 
 
 ### Stage 7: Interactive Rule Wording Review
 **Purpose**: Review and approve generated rule wording before application
+
+**MANDATORY CHECKPOINT 3**: For EACH rule, use AskUserQuestion to get user's approval/edits.
+
 **Details**: [interactive-review-guide.md](resources/interactive-review-guide.md)
 
 ### Stage 8: Apply Rules
 **Purpose**: Update instruction files and create git commit with changes
+
+**MANDATORY CHECKPOINT 4**: Use AskUserQuestion for final confirmation before modifying files.
+
 **Details**: [interactive-review-guide.md](resources/interactive-review-guide.md)
+
+---
+
+## ⚠️ CRITICAL: Mandatory User Confirmation Checkpoints
+
+This skill has FOUR mandatory user confirmation points where you MUST stop and use AskUserQuestion:
+
+### Checkpoint 1: After Preflight (Before Full Fetch)
+
+After pr-comment-fetcher returns preflight results:
+
+1. Present preflight summary to user
+2. **Use AskUserQuestion** with options:
+   - ✓ Continue with full fetch
+   - ✗ Cancel - environment issue detected
+3. Only proceed to full fetch after "Continue" selected
+
+### Checkpoint 2: Stage 5 - Pattern Review (EACH Pattern)
+
+After pattern-analyzer completes:
+
+1. Load patterns from `03-analyze/patterns.json`
+2. For EACH pattern (one at a time):
+   - Present pattern details (triage, frequency, severity, PR examples)
+   - **Use AskUserQuestion** with options based on triage:
+     - 🟢 Already Covered: Skip / Strengthen anyway / View content
+     - 🟡 Needs Strengthening: Approve / Modify / Skip / View content
+     - 🔴 New Rule: Create / Modify / Skip
+   - If "Modify" selected, use AskUserQuestion again to gather freeform feedback
+   - Record decision in memory
+3. After ALL patterns reviewed, save to `04-approve/patterns-approved.json`
+4. NEVER proceed to Stage 6 until ALL patterns confirmed
+
+### Checkpoint 3: Stage 7 - Rule Wording Review (EACH Rule)
+
+After rule-generator completes:
+
+1. Load draft rules from `05-generate/drafts/*.md`
+2. For EACH rule (one at a time):
+   - Present complete markdown content
+   - Show target file and section
+   - Show applyTo pattern (if path-scoped)
+   - **Use AskUserQuestion** with options:
+     - Approve as-is
+     - Edit wording
+     - Change target file/section
+     - Reject
+   - If "Edit" selected, use AskUserQuestion again with text input for markdown editing
+   - Record decision
+3. After ALL rules reviewed, save to `06-apply/approved-rules.json`
+4. NEVER proceed to Stage 8 until ALL rules confirmed
+
+### Checkpoint 4: Before Stage 8 - Final Confirmation
+
+Before modifying any files:
+
+1. Present summary:
+   - X new rules to create
+   - Y existing rules to strengthen
+   - Z files to modify
+   - List each file and what will change
+2. **Use AskUserQuestion**: "Apply these changes?"
+   - ✓ Yes - proceed with file edits
+   - ⏎ Review again - go back to Stage 7
+   - ✗ Cancel - stop without applying
+3. Only modify files after explicit "Yes"
+
+**ENFORCEMENT**:
+
+- You MUST use AskUserQuestion at each checkpoint
+- You MUST wait for actual user response before proceeding
+- You MUST process ONE item at a time (no batching patterns or rules)
+- You MUST NOT skip checkpoints or assume approval
 
 ---
 

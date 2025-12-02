@@ -25,8 +25,8 @@
   ],
   "instructionFiles": {
     "repository": "../copilot-review-demo/.github/copilot-instructions.md",
-    "backend": "../copilot-review-demo/backend/backend.instructions.md",
-    "frontend": "../copilot-review-demo/frontend/frontend.instructions.md",
+    "backend": "../copilot-review-demo/.github/instructions/backend.instructions.md",
+    "frontend": "../copilot-review-demo/.github/instructions/frontend.instructions.md",
     "vsCodeSecurity": "../copilot-review-demo/.vscode/rules/security-patterns.md",
     "vsCodeGeneral": "../copilot-review-demo/.vscode/rules/general-guidelines.md",
     "vsCodeTesting": "../copilot-review-demo/.vscode/rules/testing-standards.md"

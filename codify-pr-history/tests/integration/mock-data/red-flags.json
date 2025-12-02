@@ -1,0 +1,52 @@
+{
+  "analyzedAt": "2025-11-26T13:00:00Z",
+  "stack": {
+    "languages": ["typescript", "javascript"],
+    "backend": ["express", "node"],
+    "frontend": ["react"],
+    "database": ["sqlite3"],
+    "testing": ["jest", "vitest"]
+  },
+  "redFlags": [
+    {
+      "category": "security",
+      "pattern": "SQL Injection",
+      "severity": "critical",
+      "description": "Never concatenate user input into SQL queries. Always use parameterized queries.",
+      "examples": [
+        "db.query(`SELECT * FROM users WHERE id = ${userId}`)",
+        "db.all(`SELECT * FROM tasks WHERE title LIKE '%${search}%'`)"
+      ]
+    },
+    {
+      "category": "security",
+      "pattern": "Hardcoded Secrets",
+      "severity": "critical",
+      "description": "Never hardcode API keys, passwords, or secrets in source code.",
+      "examples": [
+        "const API_KEY = 'sk-1234567890abcdef'",
+        "const DB_PASSWORD = 'password123'"
+      ]
+    },
+    {
+      "category": "security",
+      "pattern": "Bcrypt Sync Methods",
+      "severity": "high",
+      "description": "Use async bcrypt methods to avoid blocking the event loop.",
+      "examples": [
+        "bcrypt.hashSync(password, 10)",
+        "bcrypt.compareSync(password, hash)"
+      ]
+    },
+    {
+      "category": "error-handling",
+      "pattern": "Missing Error Handling",
+      "severity": "high",
+      "description": "All async operations should be wrapped in try-catch blocks.",
+      "examples": [
+        "await someAsyncFunction()",
+        "const result = await api.call()"
+      ]
+    }
+  ]
+}
